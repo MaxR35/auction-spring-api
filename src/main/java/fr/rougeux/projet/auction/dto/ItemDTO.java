@@ -1,6 +1,6 @@
 package fr.rougeux.projet.auction.dto;
 
-import fr.rougeux.projet.auction.bo.Categorie;
+import fr.rougeux.projet.auction.dto.CategoryDTO;
 
 public class ItemDTO {
 
@@ -8,7 +8,7 @@ public class ItemDTO {
     private String itemName;
     private String itemDesc;
     private String itemImg;
-    private Categorie categorie;
+    private CategoryDTO category;
 
     public long getItemId() {
         return itemId;
@@ -42,11 +42,11 @@ public class ItemDTO {
         this.itemImg = itemImg;
     }
 
-    public Categorie getCategorie() {
-        return categorie;
+    public CategoryDTO getCategory() {
+        return category;
     }
 
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
+    public void setCategory(CategoryDTO categorie) {
+        this.category = categorie;
     }
 }

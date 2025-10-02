@@ -1,11 +1,8 @@
 package fr.rougeux.projet.auction.repository.impl;
 
 import fr.rougeux.projet.auction.bo.Categorie;
+import fr.rougeux.projet.auction.dto.*;
 import fr.rougeux.projet.auction.repository.SaleDAO;
-import fr.rougeux.projet.auction.dto.ItemDTO;
-import fr.rougeux.projet.auction.dto.BidDTO;
-import fr.rougeux.projet.auction.dto.UserDTO;
-import fr.rougeux.projet.auction.dto.SaleDTO;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -45,15 +42,15 @@ public class SaleDAOImpl implements SaleDAO {
     @Override
     public SaleDTO read(long saleId) {
         String query = """
-               SELECT s.sale_id, s.starting_date, s.ending_date, s.starting_price,
-                       u.user_id, u.last_name, u.first_name, u.user_img,
-                       i.item_id, i.item_name, i.item_img,
-                       c.category_id, c.label
-                FROM SALES s
-                LEFT OUTER JOIN USERS u ON s.seller_id = u.user_id
-                LEFT OUTER JOIN ITEMS i ON s.item_id = i.item_id
-                LEFT OUTER JOIN CATEGORIES c ON i.category_id = c.category_id
-                WHERE s.sale_id = :id
+                SELECT s.sale_id, s.starting_date, s.ending_date, s.starting_price,
+                        u.user_id, u.last_name, u.first_name, u.user_img,
+                        i.item_id, i.item_name, i.item_img,
+                        c.category_id, c.label
+                 FROM SALES s
+                 LEFT OUTER JOIN USERS u ON s.seller_id = u.user_id
+                 LEFT OUTER JOIN ITEMS i ON s.item_id = i.item_id
+                 LEFT OUTER JOIN CATEGORIES c ON i.category_id = c.category_id
+                 WHERE s.sale_id = :id
                 """;
 
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
@@ -127,12 +124,12 @@ public class SaleDAOImpl implements SaleDAO {
             item.setItemImg(rs.getString("item_img"));
 
             // Categorie Article
-            Categorie categorie = new Categorie();
+            CategoryDTO category = new CategoryDTO();
 
-            categorie.setCategorieId(rs.getLong("category_id"));
-            categorie.setLabel(rs.getString("label"));
+            category.setCategoryId(rs.getLong("category_id"));
+            category.setLabel(rs.getString("label"));
 
-            item.setCategorie(categorie);
+            item.setCategory(category);
             sale.setItem(item);
 
             return sale;

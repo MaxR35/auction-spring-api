@@ -2,7 +2,6 @@ package fr.rougeux.projet.auction.controller;
 
 import fr.rougeux.projet.auction.dto.SaleDTO;
 import fr.rougeux.projet.auction.exception.BusinessException;
-import fr.rougeux.projet.auction.repository.SaleRepository;
 import fr.rougeux.projet.auction.service.SaleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +17,9 @@ public class SaleController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SaleController.class);
     private final SaleService saleService;
-    private final SaleRepository saleRepository;
 
-    public SaleController(SaleService saleService, SaleRepository saleRepository) {
+    public SaleController(SaleService saleService) {
         this.saleService = saleService;
-        this.saleRepository = saleRepository;
     }
 
     @PreAuthorize("hasRole('USER')")

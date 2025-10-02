@@ -4,5 +4,6 @@ import fr.rougeux.projet.auction.dto.UserDTO;
 
 public interface UserDAO {
 
+    public UserDTO getUserById(long userId);
     public UserDTO getUserByEmail(String email);
 }

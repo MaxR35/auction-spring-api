@@ -68,7 +68,8 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/auth/logout").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/sales/**").hasRole("USER") // Reserve aux ROLE_USER
-                        .requestMatchers(HttpMethod.GET,"/img/**").hasRole("USER") // Reserve aux ROLE_USER
+                        .requestMatchers(HttpMethod.GET,"/api/categories").hasRole("USER") // Reserve aux ROLE_USER
+                        .requestMatchers(HttpMethod.GET,"/img/**").permitAll()
                         .anyRequest().denyAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

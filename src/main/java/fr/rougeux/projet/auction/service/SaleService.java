@@ -8,4 +8,5 @@ public interface SaleService {
 
     public List<SaleDTO> readAllVente();
     public SaleDTO readSaleById(long saleId);
+
 }

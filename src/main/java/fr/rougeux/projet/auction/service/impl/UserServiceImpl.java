@@ -13,7 +13,14 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
+
+    @Override
     public UserDTO findByEmail(String email) {
         return userDAO.getUserByEmail(email);
+    }
+
+    @Override
+    public UserDTO findById(long userId) {
+        return userDAO.getUserById(userId);
     }
 }

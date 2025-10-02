@@ -16,7 +16,6 @@ public class SaleServiceImpl implements SaleService {
 
     private final SaleDAO saleDAO;
 
-
     public SaleServiceImpl(SaleDAO dao) {
         this.saleDAO = dao;
     }
