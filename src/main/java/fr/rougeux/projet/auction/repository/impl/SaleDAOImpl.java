@@ -28,7 +28,7 @@ public class SaleDAOImpl implements SaleDAO {
         String query = """
                 SELECT s.sale_id, s.starting_date, s.ending_date, s.starting_price,
                        u.user_id, u.last_name, u.first_name, u.user_img,
-                       i.item_id, i.item_name, i.item_img,
+                       i.item_id, i.item_name, i.item_img, i.item_desc,
                        c.category_id, c.label
                 FROM SALES s
                 LEFT OUTER JOIN USERS u ON s.seller_id = u.user_id
@@ -36,7 +36,24 @@ public class SaleDAOImpl implements SaleDAO {
                 LEFT OUTER JOIN CATEGORIES c ON i.category_id = c.category_id
                 """;
 
-        return jdbcTemplate.query(query, new SaleRowMapper());
+        return jdbcTemplate.query(query, new SaleRowMapper(true));
+    }
+    @Override
+    public List<SaleDTO> readAllByUserId(long id) {
+        String query = """
+                SELECT s.sale_id, s.starting_date, s.ending_date, s.starting_price, s.seller_id,
+                       i.item_id, i.item_name, i.item_img, i.item_desc,
+                       c.category_id, c.label
+                FROM SALES s
+                LEFT OUTER JOIN ITEMS i ON s.item_id = i.item_id
+                LEFT OUTER JOIN CATEGORIES c ON i.category_id = c.category_id
+                WHERE s.seller_id = :id
+                """;
+
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("id", id);
+
+        return jdbcTemplate.query(query, paramSource, new SaleRowMapper(false));
     }
 
     @Override
@@ -44,7 +61,7 @@ public class SaleDAOImpl implements SaleDAO {
         String query = """
                 SELECT s.sale_id, s.starting_date, s.ending_date, s.starting_price,
                         u.user_id, u.last_name, u.first_name, u.user_img,
-                        i.item_id, i.item_name, i.item_img,
+                        i.item_id, i.item_name, i.item_img, i.item_desc,
                         c.category_id, c.label
                  FROM SALES s
                  LEFT OUTER JOIN USERS u ON s.seller_id = u.user_id
@@ -56,7 +73,7 @@ public class SaleDAOImpl implements SaleDAO {
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("id", saleId);
 
-        return jdbcTemplate.queryForObject(query, paramSource, new SaleRowMapper());
+        return jdbcTemplate.queryForObject(query, paramSource, new SaleRowMapper(true));
     }
 
     @Override
@@ -95,46 +112,50 @@ public class SaleDAOImpl implements SaleDAO {
     }
 
 
-    private static class SaleRowMapper implements RowMapper<SaleDTO> {
+    private record SaleRowMapper(boolean includeSeller) implements RowMapper<SaleDTO> {
+
         @Override
-        public SaleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-            SaleDTO sale = new SaleDTO();
+            public SaleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                SaleDTO sale = new SaleDTO();
 
-            sale.setSaleId(rs.getLong("sale_id"));
-            sale.setStartingDate(rs.getObject("starting_date", LocalDateTime.class));
-            sale.setEndingDate(rs.getObject("ending_date", LocalDateTime.class));
-            sale.setStartingPrice(rs.getInt("starting_price"));
-            sale.setStatus();
+                sale.setSaleId(rs.getLong("sale_id"));
+                sale.setStartingDate(rs.getObject("starting_date", LocalDateTime.class));
+                sale.setEndingDate(rs.getObject("ending_date", LocalDateTime.class));
+                sale.setStartingPrice(rs.getInt("starting_price"));
+                sale.setStatus();
 
-            // Vendeur
-            UserDTO seller = new UserDTO();
+                if (includeSeller) {
+                    // Vendeur
+                    UserDTO seller = new UserDTO();
 
-            seller.setUserId(rs.getLong("user_id"));
-            seller.setLastName(rs.getString("last_name"));
-            seller.setFirstName(rs.getString("first_name"));
-            seller.setUserImg(rs.getString("user_img"));
+                    seller.setUserId(rs.getLong("user_id"));
+                    seller.setLastName(rs.getString("last_name"));
+                    seller.setFirstName(rs.getString("first_name"));
+                    seller.setUserImg(rs.getString("user_img"));
 
-            sale.setSeller(seller);
+                    sale.setSeller(seller);
+                }
 
-            // Article Vendu
-            ItemDTO item = new ItemDTO();
+                // Article Vendu
+                ItemDTO item = new ItemDTO();
 
-            item.setItemId(rs.getLong("item_id"));
-            item.setItemName(rs.getString("item_name"));
-            item.setItemImg(rs.getString("item_img"));
+                item.setItemId(rs.getLong("item_id"));
+                item.setItemName(rs.getString("item_name"));
+                item.setItemImg(rs.getString("item_img"));
+                item.setItemDesc(rs.getString("item_desc"));
 
-            // Categorie Article
-            CategoryDTO category = new CategoryDTO();
+                // Categorie Article
+                CategoryDTO category = new CategoryDTO();
 
-            category.setCategoryId(rs.getLong("category_id"));
-            category.setLabel(rs.getString("label"));
+                category.setCategoryId(rs.getLong("category_id"));
+                category.setLabel(rs.getString("label"));
 
-            item.setCategory(category);
-            sale.setItem(item);
+                item.setCategory(category);
+                sale.setItem(item);
 
-            return sale;
+                return sale;
+            }
         }
-    }
 
     private static class BidRowMapper implements RowMapper<BidDTO> {
         @Override

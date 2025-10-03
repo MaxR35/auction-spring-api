@@ -12,4 +12,6 @@ public interface SaleDAO {
 
     public List<BidDTO> readAllBid(long saleId);
     public Integer readMaxBid(long saleId);
+
+    public List<SaleDTO> readAllByUserId(long userId);
 }

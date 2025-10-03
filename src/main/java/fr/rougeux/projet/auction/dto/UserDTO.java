@@ -12,6 +12,16 @@ public class UserDTO {
     private String phone;
     private int credit;
 
+    private List<SaleDTO> sales;
+
+    public List<SaleDTO> getSales() {
+        return sales;
+    }
+
+    public void setSales(List<SaleDTO> saleList) {
+        this.sales = saleList;
+    }
+
     public long getUserId() {
         return userId;
     }
