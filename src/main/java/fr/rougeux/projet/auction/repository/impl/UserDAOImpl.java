@@ -44,4 +44,29 @@ public class UserDAOImpl implements UserDAO {
 
         return jdbcTemplate.queryForObject(query, params, new BeanPropertyRowMapper<>(UserDTO.class));
     }
+
+    @Override
+    public void update(UserDTO userDTO) {
+        String query = """
+                UPDATE USERS
+                SET last_name = :lastName,
+                    first_name = :firstName,
+                    email = :email,
+                    user_img = :userImg,
+                    phone = :phone,
+                    credit = :credit
+                WHERE user_id = :userId
+                """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("lastName", userDTO.getLastName());
+        params.addValue("firstName", userDTO.getFirstName());
+        params.addValue("email", userDTO.getEmail());
+        params.addValue("userImg", userDTO.getUserImg());
+        params.addValue("phone", userDTO.getPhone());
+        params.addValue("credit", userDTO.getCredit());
+        params.addValue("userId", userDTO.getUserId());
+
+        jdbcTemplate.update(query, params);
+    }
 }

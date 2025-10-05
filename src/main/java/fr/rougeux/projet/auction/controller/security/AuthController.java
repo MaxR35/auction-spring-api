@@ -42,7 +42,7 @@ public class AuthController {
     @GetMapping("/me")
     public UserDTO authVerif() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName(); // récupère le username/email
+        String email = auth.getName();
 
         return userService.findByEmail(email);
     }

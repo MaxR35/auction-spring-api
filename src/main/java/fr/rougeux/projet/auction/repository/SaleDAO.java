@@ -2,6 +2,7 @@ package fr.rougeux.projet.auction.repository;
 
 import fr.rougeux.projet.auction.dto.BidDTO;
 import fr.rougeux.projet.auction.dto.SaleDTO;
+import fr.rougeux.projet.auction.dto.post.BidRequest;
 
 import java.util.List;
 

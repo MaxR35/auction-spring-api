@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class BidDTO {
 
     private long bidId;
-    private LocalDateTime bidTime;
+    private LocalDateTime bidTime = LocalDateTime.now();
     private int bidAmount;
     private UserDTO user;
 

@@ -2,6 +2,7 @@ package fr.rougeux.projet.auction.repository.impl;
 
 import fr.rougeux.projet.auction.bo.Categorie;
 import fr.rougeux.projet.auction.dto.*;
+import fr.rougeux.projet.auction.dto.post.BidRequest;
 import fr.rougeux.projet.auction.repository.SaleDAO;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -55,6 +56,7 @@ public class SaleDAOImpl implements SaleDAO {
 
         return jdbcTemplate.query(query, paramSource, new SaleRowMapper(false));
     }
+
 
     @Override
     public SaleDTO read(long saleId) {
